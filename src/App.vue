@@ -1,30 +1,29 @@
 <script setup>
-import Home from '@/components/Home.vue'
 import Splashscreen from '@/components/Splashscreen.vue'
+import Home from '@/components/Home.vue'
 import { defineAsyncComponent } from 'vue';
 
-const HomeC = defineAsyncComponent(() => {
-  new Promise((resolve) => {
+const HomeAsync = defineAsyncComponent(() => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(Home);
-    }, 3000);
+    }, 2500);
   });
 });
-
 </script>
 
 <template>
-    <Suspense>
-        <template #default>
-            <Home />
-        </template>
-        <template #fallback>
-            <Splashscreen />
-        </template>
-    </Suspense>
+  <Suspense>
+    <template #default>
+      <HomeAsync/>
+    </template>
+    <template #fallback>
+      <Splashscreen/>
+    </template>
+  </Suspense>
 </template>
 
-<style scoped>
+<style>
 html,
 body,
 .app {
@@ -32,8 +31,9 @@ body,
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 * {
   --brand-green: #04b500;
-  --brand-blue: #070707;
+  --brand-blue: #0689b0;
 }
 </style>
