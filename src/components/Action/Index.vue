@@ -3,7 +3,35 @@
         Agregar movimiento
     </button>
     <Teleport to="#app">
-        <Modal v-show="showModal" @close="showModal = false" />
+        <Modal v-show="showModal" @close="showModal = false" >
+            <form @submit.prevent="submit">
+                <div class="field">
+                    <label for="date">Titulo</label>
+                    <input type="text" v-model="title">
+                </div>
+                <div class="field">
+                    <label for="amount">Monto</label>
+                    <input type="number" id="amount"  v-model="amount">
+                </div>
+                <div class="field">
+                    <label for="description">Descripción</label>
+                    <textarea rows="4" id="description"  v-model="description" />
+                </div>
+                <div class="field">
+                    <label for="type" class="radio-label">
+                        <input type="radio" id="type" name="type" value="income" v-model="type">
+                        <span>Ingreso</span>
+                    </label>
+                    <label for="type" class="radio-label">
+                        <input type="radio" id="type" name="type" value="expense" v-model="type">
+                        <span>Gasto</span>
+                    </label>
+                </div>
+                <div class="action">
+                    <button type="submit">Agregar movimiento</button>
+                </div>
+            </form>
+        </Modal>
     </Teleport>
 </template>
 <script setup>
@@ -12,6 +40,15 @@ import { ref } from 'vue';
 import Modal from '@/components/Action/Modal.vue'
 
 const showModal = ref(false);
+const title = ref('');
+const amount = ref(0);
+const description = ref('');
+const type = ref('income');
+
+const submit = () => {
+    console.log(title.value, amount.value, description.value, type.value);
+    showModal.value = false;
+}
 
 
 </script>

@@ -14,7 +14,7 @@
 
 <script setup>
 
-import { toRefs, computed } from 'vue';
+import { toRefs, computed, defineProps } from 'vue';
 
 const props = defineProps(
     {
