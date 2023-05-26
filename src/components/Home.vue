@@ -59,6 +59,7 @@ const movements = [
         },
 ]
 
-const amounts = [2000, 500, -100, 1000, 1000];
+const amounts =  [100, 200, 500, 200, -400, -600, -300, 0, 300, 500];
+
 
 </script>
