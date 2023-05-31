@@ -38,8 +38,9 @@ const props = defineProps({
     },
 });
 
-const { amounts } = toRefs(props);
+console.log(props);
 
+const { amounts } = toRefs(props);
 
 const amountToPixels = (amount) => {
     const min = Math.min(...amounts.value);

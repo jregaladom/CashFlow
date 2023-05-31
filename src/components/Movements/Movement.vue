@@ -14,7 +14,7 @@
     </div>
 </template>
 <script setup>
-import { defineProps, toRefs, computed , defineEmits} from 'vue';
+import {  toRefs, computed } from 'vue';
 const props = defineProps({
     title: {
         type: String,
