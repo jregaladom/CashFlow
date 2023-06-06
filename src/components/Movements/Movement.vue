@@ -14,7 +14,8 @@
     </div>
 </template>
 <script setup>
-import {  toRefs, computed } from 'vue';
+import { toRefs, defineProps, defineEmits, computed } from "vue";
+
 const props = defineProps({
     title: {
         type: String,
@@ -23,7 +24,7 @@ const props = defineProps({
         type: String,
     },
     id:{
-        type: Number,
+        type: String,
     },
     amount: {
         type: Number,
@@ -39,6 +40,7 @@ const isNegative = computed(() => {
 const amountVisual = computed(() => {
    return amount.value !== null ?  amount.value : 0;
 });
+
 
 
 const currencyFormater = (amount) => {

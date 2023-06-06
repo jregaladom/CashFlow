@@ -36,7 +36,7 @@
 </template>
 <script setup>
 
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import Modal from '@/components/Action/Modal.vue'
 
 const showModal = ref(false);
@@ -45,9 +45,19 @@ const amount = ref(0);
 const description = ref('');
 const type = ref('income');
 
+
+const emit = defineEmits(['create']);
+
 const submit = () => {
-    console.log(title.value, amount.value, description.value, type.value);
     showModal.value = false;
+    emit('create', {
+        id: Math.random().toString(16).slice(2),
+        title: title.value,
+        amount: type.value === 'income' ? amount.value : -amount.value,
+        description: description.value,
+        time: new Date('2023-06-06'),
+       
+    });
 }
 
 
