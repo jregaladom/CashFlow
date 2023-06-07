@@ -4,9 +4,9 @@
             <Header/>
         </template>
         <template #resume>
-            <Resume :label="'Ahorro Total'"  :total-amount="100000" >
+            <Resume :label="'Ahorro Total'" :total-amount="totalAmount" :amount="amount" >
                 <template #graphic>
-                    <Graphic :amounts="amounts" />
+                    <Graphic :amounts="amounts" @select="select" :date-amount="dateAmount" />
                 </template>
                 <template #action >
                     <Action @create="create"/>
@@ -25,89 +25,68 @@ import Resume from '@/components/Resume/Index.vue';
 import Movements from '@/components/Movements/Index.vue';
 import Action from '@/components/Action/Index.vue';
 import Graphic from '@/components/Resume/Graphic.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 const movements = ref([]);
-
-// const movements = ref([
-// {
-//           id:Math.random().toString(16).slice(2),
-//           title: "Movimiento",
-//           description: "Deposito de salario",
-//           amount: 10,
-//           time:new Date('2023-05-01')
-//         },
-//         {
-//           id: Math.random().toString(16).slice(2),
-//           title: "Movimiento 1",
-//           description: "Deposito de honorarios",
-//           amount: 60,
-//           time: new Date('2023-05-14')
-//         },
-//         {
-//           id:Math.random().toString(16).slice(2),
-//           title: "Movimiento 3",
-//           description: "Comida",
-//           amount: -100,
-//           time: new Date('2023-05-14')
-//         },
-//         {
-//           id:Math.random().toString(16).slice(2),
-//           title: "Movimiento 4",
-//           description: "Colegiatura",
-//           amount: 300,
-//           time: new Date('2023-05-17')
-//         },
-//         {
-//           id:Math.random().toString(16).slice(2),
-//           title: "Movimiento 5",
-//           description: "Reparación equipo",
-//           amount: 500,
-//           time: new Date('2023-05-20')
-//         },
-//         {
-//           id: Math.random().toString(16).slice(2),
-//           title: "Movimiento 6",
-//           description: "Autobus",
-//           amount: -50,
-//           time: new Date('2023-05-19')
-//         },
-// ]);
+const amount = ref(null);
+const dateAmount = ref('Últimos 30 días');
 
 const create = (inMovement) => {
  movements.value.push(inMovement);
+ save();
 };
 
 const remove = (id) => {
   const index = movements.value.findIndex((m) => m.id === id);
   movements.value.splice(index, 1);
+  save();
 };
 
-const amounts = computed(() => {
-  const _amount = movements.value.filter((m) =>{
-  const currentDay = new Date();
-  const oldDate =  new Date( (currentDay.getDate() - 30));
-  return m.time >= oldDate;
-}).map(m => m.amount);
+onMounted(() => {
+  const movementsFromLocalStorage = localStorage.getItem("movements");
+  if (movementsFromLocalStorage) {
+    movements.value = JSON.parse(movementsFromLocalStorage)?.map(
+      (movement) => ({
+        ...movement,
+        time: new Date(movement.time),
+      })
+    );
+  }
+})
 
-return _amount.map((m, i) => {
-        const lastMovements = _amount.slice(0, i);
+const totalAmount = computed(() => {
+    const total = movements.value.reduce((acc, movement) => {
+        return acc + movement.amount;
+    }, 0);
 
-        return lastMovements.reduce((suma, movement) => {
-          return suma + movement
-        }, 0);
-      });
+    return total;
 });
 
+const amounts = computed(() => {
+    const _amount = movements.value.filter((m) =>{
+      const today = new Date();
+            const oldDate = today.setDate(today.getDate() - 30);
+
+            return m.time > oldDate;
+  }).map(m => m.amount);
+
+  return _amount.map((m, i) => {
+          const lastMovements = _amount.slice(0, i+1);
+
+          return lastMovements.reduce((suma, movement) => {
+            return suma + movement
+          }, 0);
+        });
+
+});
 
 const save = () => {
-  localStorage.setItem('movements', JSON.stringify(movements.value));
+  localStorage.setItem("movements", JSON.stringify(movements.value));
 }
 
-
-
-
-
-
-
+const select = (value) => {
+  console.log(value);
+  amount.value = value.amount != null ? value.amount : null;
+  dateAmount.value = value.index != null ? `Al día ${movements.value[value.index].time}`:  'Últimos 30 días' ; 
+}
 </script>

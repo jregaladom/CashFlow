@@ -30,7 +30,7 @@ const props = defineProps(
 const {label, amount, totalAmount} = toRefs(props);
 
 const amountVisual = computed(() => {
-   return amount.value !== null ?  amount.value : totalAmount.value;
+   return amount.value !== null ? amount.value : totalAmount.value;
 });
 
 

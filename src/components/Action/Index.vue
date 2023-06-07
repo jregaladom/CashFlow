@@ -58,6 +58,11 @@ const submit = () => {
         time: new Date('2023-06-06'),
        
     });
+    title.value = '';
+    amount.value = 0;
+    description.value = '';
+    type.value = 'income';
+    
 }
 
 
